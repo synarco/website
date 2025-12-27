@@ -232,24 +232,24 @@
         .cta p { color: var(--text-muted); margin-bottom: 32px; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto; }
         
         .price-box {
-            display: inline-block;
+            position: relative;
             background: var(--bg-card);
             border: 2px solid var(--primary);
             border-radius: 20px;
-            padding: 40px 60px;
-            margin-bottom: 32px;
+            padding: 40px 30px;
             box-shadow: 0 20px 60px var(--glow);
+            text-align: center;
         }
         
         .price-box h3 { font-size: 1.5rem; margin-bottom: 8px; }
         
         .price-box .price {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 3.5rem; font-weight: 700;
+            font-size: 3rem; font-weight: 700;
             color: var(--primary-light);
         }
         
-        .price-box .price span { font-size: 1rem; color: var(--text-muted); }
+        .price-box .price span { font-size: 1rem; color: var(--text-muted); margin-left: 4px; }
         
         .price-box ul {
             list-style: none; text-align: left;
@@ -352,45 +352,51 @@
             </div>
             <div class="screenshot-grid">
                 <div class="screenshot-card">
-                    <div class="placeholder">📊</div>
+                    <img src="screenshots/dashboard.png" alt="Dashboard" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">📊</div>
                     <div class="screenshot-card-content">
                         <h3>Dashboard</h3>
                         <p>Real-time monitoring with server stats, user counts, and quick controls. Start/stop your bot with one click.</p>
                     </div>
                 </div>
                 <div class="screenshot-card">
-                    <div class="placeholder">🎵</div>
+                    <img src="screenshots/music-library.png" alt="Music Library" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">🎵</div>
                     <div class="screenshot-card-content">
                         <h3>Music Library</h3>
-                        <p>Manage playlists, favorites, and music settings. Support for YouTube, Spotify, and SoundCloud.</p>
+                        <p>Save your favorite songs and playlists for quick access. Support for YouTube, Spotify, and SoundCloud.</p>
                     </div>
                 </div>
                 <div class="screenshot-card">
-                    <div class="placeholder">🎭</div>
+                    <img src="screenshots/reaction-roles.png" alt="Reaction Roles" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">🎭</div>
                     <div class="screenshot-card-content">
                         <h3>Reaction Roles</h3>
-                        <p>Visual builder for reaction roles. Create button roles, dropdown menus, or classic reaction roles.</p>
+                        <p>Visual emoji picker and role builder. Set up self-assign roles in seconds with any emoji.</p>
                     </div>
                 </div>
                 <div class="screenshot-card">
-                    <div class="placeholder">📈</div>
+                    <img src="screenshots/leveling.png" alt="Leveling System" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">📈</div>
                     <div class="screenshot-card-content">
                         <h3>Leveling System</h3>
-                        <p>Configure XP rates, level roles, rank card backgrounds, and voice XP multipliers.</p>
+                        <p>Configure XP rates, voice XP, multiplier roles, and customize rank card colors.</p>
                     </div>
                 </div>
                 <div class="screenshot-card">
-                    <div class="placeholder">💰</div>
+                    <img src="screenshots/economy.png" alt="Economy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">💰</div>
                     <div class="screenshot-card-content">
                         <h3>Economy</h3>
-                        <p>Set up shop items, configure gambling, and manage the virtual economy.</p>
+                        <p>Custom currency name & symbol. Create shop items with role rewards and stock limits.</p>
                     </div>
                 </div>
                 <div class="screenshot-card">
-                    <div class="placeholder">🛡️</div>
+                    <img src="screenshots/automod.png" alt="Auto-Moderation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="placeholder" style="display:none">🛡️</div>
                     <div class="screenshot-card-content">
                         <h3>Auto-Moderation</h3>
-                        <p>Configure spam detection, word filters, link blocking, and automatic punishments.</p>
+                        <p>Word filter, spam detection, link blocking, and mass mention protection with one-click toggles.</p>
                     </div>
                 </div>
             </div>
@@ -453,19 +459,45 @@
             <h2>Get The Control Panel</h2>
             <p>Run your own private instance with full customization and control. Join our Discord server to purchase!</p>
             
-            <div class="price-box">
-                <h3>Control Panel License</h3>
-                <div class="price">$9.99+ <span>one-time</span></div>
-                <ul>
-                    <li>Full Control Panel GUI</li>
-                    <li>All Bot Features Included</li>
-                    <li>Lifetime Updates</li>
-                    <li>Priority Support</li>
-                    <li>Unlimited Servers</li>
-                </ul>
+            <div class="pricing-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px;margin:40px 0;max-width:900px;margin-left:auto;margin-right:auto;">
+                <div class="price-box" style="border-color:#60a5fa;">
+                    <h3>Monthly</h3>
+                    <div class="price">$9.99<span>/month</span></div>
+                    <ul>
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Updates Included</li>
+                        <li>Standard Support</li>
+                        <li>Cancel Anytime</li>
+                    </ul>
+                </div>
+                
+                <div class="price-box" style="border-color:#a855f7;transform:scale(1.05);">
+                    <div style="background:var(--primary);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;position:absolute;top:-12px;left:50%;transform:translateX(-50%);">MOST POPULAR</div>
+                    <h3>Yearly</h3>
+                    <div class="price">$79<span>/year</span></div>
+                    <ul>
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Updates Included</li>
+                        <li>Standard Support</li>
+                        <li>Save 34%</li>
+                    </ul>
+                </div>
+                
+                <div class="price-box" style="border-color:#22c55e;">
+                    <div style="background:#22c55e;color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;position:absolute;top:-12px;left:50%;transform:translateX(-50%);">BEST VALUE</div>
+                    <h3>Lifetime</h3>
+                    <div class="price">$149<span>one-time</span></div>
+                    <ul>
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Lifetime Updates</li>
+                        <li style="color:#22c55e;font-weight:600">⭐ Priority Support</li>
+                        <li>Pay Once, Own Forever</li>
+                    </ul>
+                </div>
             </div>
-            
-            <br><br>
             
             <div class="hero-buttons">
                 <a href="https://discord.com/oauth2/authorize?client_id=1450690787871559831&permissions=8&scope=bot%20applications.commands" class="btn btn-discord" target="_blank">
