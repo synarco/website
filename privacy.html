@@ -5,40 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - The Evil Bot</title>
     <style>
-        :root { --bg: #0a0a0f; --text: #fff; --muted: #9ca3af; --primary: #a855f7; }
+        :root { --bg: #0a0a0f; --bg-card: #111118; --text: #ffffff; --text-muted: #9ca3af; --primary: #a855f7; --border: #1f1f2e; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
-        .container { max-width: 800px; margin: 0 auto; padding: 60px 24px; }
-        h1 { font-size: 2.5rem; margin-bottom: 8px; }
-        .updated { color: var(--muted); margin-bottom: 40px; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { font-size: 2rem; margin-bottom: 8px; }
+        .date { color: var(--text-muted); margin-bottom: 32px; }
         h2 { font-size: 1.25rem; margin: 32px 0 16px; color: var(--primary); }
-        p, li { color: var(--muted); margin-bottom: 16px; }
-        ul { margin-left: 24px; }
+        p, li { color: var(--text-muted); margin-bottom: 16px; }
+        ul { padding-left: 24px; }
         a { color: var(--primary); }
-        .back { display: inline-block; margin-bottom: 32px; color: var(--muted); text-decoration: none; }
+        .back { display: inline-block; margin-bottom: 24px; color: var(--text-muted); text-decoration: none; }
+        .back:hover { color: var(--text); }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back">← Back to Home</a>
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: December 2024</p>
+        <p class="date">Last updated: January 1, 2025</p>
         
         <h2>1. Information We Collect</h2>
-        <p>For the bot: Discord User IDs, message counts (not content), voice activity duration.</p>
-        <p>For purchases: Email address, payment info (via payment processor).</p>
+        <p>We collect the following information:</p>
+        <ul>
+            <li><strong>License Data:</strong> Email address, hardware ID for license validation</li>
+            <li><strong>Payment Data:</strong> Handled by Stripe; we don't store credit card information</li>
+            <li><strong>Discord Data:</strong> Discord user ID for support and delivery</li>
+        </ul>
         
-        <h2>2. What We Don't Collect</h2>
-        <p>We do not collect message content, voice audio, or personal information beyond Discord IDs.</p>
+        <h2>2. How We Use Information</h2>
+        <p>We use your information to:</p>
+        <ul>
+            <li>Validate and manage your license</li>
+            <li>Provide customer support</li>
+            <li>Send important updates about the Software</li>
+            <li>Process payments through Stripe</li>
+        </ul>
         
-        <h2>3. Data Sharing</h2>
-        <p>We do not sell your data. Data is only shared with payment processors to complete transactions.</p>
+        <h2>3. Data Storage</h2>
+        <p>Your license data is stored securely. We use industry-standard security measures to protect your information.</p>
         
-        <h2>4. Your Rights</h2>
-        <p>You can request deletion of your data by contacting us or removing the bot from your server.</p>
+        <h2>4. Third-Party Services</h2>
+        <p>We use the following third-party services:</p>
+        <ul>
+            <li><strong>Stripe:</strong> Payment processing</li>
+            <li><strong>Discord:</strong> Community and support</li>
+            <li><strong>GitHub:</strong> Software distribution</li>
+        </ul>
         
-        <h2>5. Contact</h2>
-        <p>For privacy concerns, email us at <a href="mailto:discordevilbot@gmail.com">discordevilbot@gmail.com</a> or join our <a href="https://dsc.gg/mozart">Discord server</a>.</p>
+        <h2>5. Bot Data</h2>
+        <p>The Evil Bot may collect and store:</p>
+        <ul>
+            <li>Server IDs and channel IDs for configuration</li>
+            <li>User IDs for leveling, economy, and moderation features</li>
+            <li>Message content only when required for features (auto-moderation, custom commands)</li>
+        </ul>
+        <p>This data is stored locally on your server or in your configured database. We do not have access to your bot's data.</p>
+        
+        <h2>6. Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li>Request access to your data</li>
+            <li>Request deletion of your data</li>
+            <li>Opt out of marketing communications</li>
+        </ul>
+        
+        <h2>7. Contact</h2>
+        <p>For privacy concerns, contact us at <a href="mailto:discordevilbot@gmail.com">discordevilbot@gmail.com</a>.</p>
+        
+        <p style="margin-top:48px;">© 2025 Synar. All rights reserved.</p>
     </div>
 </body>
 </html>
