@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Evil Bot - Discord Bot with GUI Control Panel</title>
+    <meta name="description" content="The ultimate Discord bot with a beautiful desktop control panel. Music, leveling, economy, moderation, and more. By Synar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #111118;
+            --bg-hover: #1a1a24;
+            --text: #ffffff;
+            --text-muted: #9ca3af;
+            --primary: #a855f7;
+            --primary-light: #c084fc;
+            --secondary: #6366f1;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #1f1f2e;
+            --discord: #5865F2;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Background effects */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(168, 85, 247, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 85, 247, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1200px;
+            height: 1200px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 16px 40px;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+        
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover { color: var(--text); }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.3);
+        }
+        
+        .btn-discord {
+            background: var(--discord);
+            color: white;
+        }
+        
+        .btn-discord:hover {
+            background: #4752c4;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: var(--bg-hover);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 24px;
+        }
+        
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
+        }
+        
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Section styling */
+        section {
+            padding: 100px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+        
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+        
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Screenshots */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .screenshot-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .screenshot-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .screenshot-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .screenshot-card .info {
+            padding: 20px;
+        }
+        
+        .screenshot-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        .screenshot-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .price-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .price-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .price-card.featured {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+        
+        .price-card.featured:hover {
+            transform: scale(1.02) translateY(-4px);
+        }
+        
+        .price-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .price-badge.green {
+            background: var(--success);
+        }
+        
+        .price-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .price-amount {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .price-amount .amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .price-amount .period {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+        
+        .price-features {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        
+        .price-features li {
+            padding: 10px 0;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .price-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .price-features li.highlight {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .price-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .price-buttons .btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .stripe-btn-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* License Terms */
+        .license-terms {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 800px;
+            margin: 40px auto 0;
+        }
+        
+        .license-terms h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .license-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .license-item {
+            text-align: center;
+        }
+        
+        .license-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .license-item p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .faq-question:hover {
+            background: var(--bg-hover);
+        }
+        
+        .faq-answer {
+            padding: 0 24px 20px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 60px 20px;
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .footer-brand img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover { color: var(--text); }
+        
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        /* Discord icon */
+        .discord-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav { padding: 12px 16px; }
+            .nav-links { display: none; }
+            .hero { padding: 100px 16px 60px; }
+            .hero-logo { width: 80px; height: 80px; }
+            section { padding: 60px 16px; }
+            .price-card.featured { transform: none; }
+            .footer-content { flex-direction: column; text-align: center; }
+            .footer-links { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+    
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <img src="logo.png" alt="Evil Bot" class="logo-icon" onerror="this.outerHTML='<div style=\'width:40px;height:40px;background:linear-gradient(135deg,#a855f7,#6366f1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;\'>😈</div>'">
+                <span class="logo-text">The Evil Bot</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#screenshots">Screenshots</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+                <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank">
+                    <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                    Join Discord
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">✨ By Synar</div>
+            <img src="logo.png" alt="Evil Bot" class="hero-logo" onerror="this.outerHTML='<div style=\'width:120px;height:120px;background:linear-gradient(135deg,#a855f7,#6366f1);border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin:0 auto 24px;box-shadow:0 20px 60px rgba(168,85,247,0.3);\'>😈</div>'">
+            <h1>The <span>Evil Bot</span></h1>
+            <p>The ultimate Discord bot with a beautiful desktop control panel. Music, leveling, economy, moderation, reaction roles, and much more.</p>
+            <div class="hero-buttons">
+                <a href="#pricing" class="btn btn-primary">Get Started</a>
+                <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank">
+                    <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                    Try Free Demo
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Packed with Features</h2>
+                <p>Everything you need to run an amazing Discord server</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎵</div>
+                    <h3>Music System</h3>
+                    <p>Play music from YouTube, Spotify, and SoundCloud with queue management, filters, and 24/7 mode.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Leveling System</h3>
+                    <p>Engage your community with XP, level-up messages, role rewards, and beautiful rank cards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Economy</h3>
+                    <p>Full economy with daily rewards, work commands, shop system, gambling, and leaderboards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Auto-Moderation</h3>
+                    <p>Protect your server with anti-spam, word filters, caps detection, and invite blocking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <h3>Reaction Roles</h3>
+                    <p>Let members self-assign roles by clicking reactions. Easy setup through the control panel.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3>Starboard</h3>
+                    <p>Highlight the best messages in a dedicated channel when they get enough reactions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎫</div>
+                    <h3>Ticket System</h3>
+                    <p>Support tickets with customizable categories, transcripts, and staff management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🖥️</div>
+                    <h3>Desktop Control Panel</h3>
+                    <p>Beautiful GUI to configure everything without touching code. Real-time logs and controls.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Screenshots Section -->
+    <section id="screenshots" style="background: var(--bg-card);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Beautiful Control Panel</h2>
+                <p>Configure everything through an intuitive desktop application</p>
+            </div>
+            
+            <div class="screenshots-grid">
+                <div class="screenshot-card">
+                    <img src="screenshots/dashboard.png" alt="Dashboard" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Dashboard'">
+                    <div class="info">
+                        <h3>Dashboard</h3>
+                        <p>Monitor server stats, control bot status, and view real-time logs.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshots/music-library.png" alt="Music Library" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Music+Library'">
+                    <div class="info">
+                        <h3>Music Library</h3>
+                        <p>Manage playlists, view queue, and control playback settings.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshots/leveling.png" alt="Leveling" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Leveling+System'">
+                    <div class="info">
+                        <h3>Leveling System</h3>
+                        <p>Configure XP rates, level roles, and customize rank cards.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshots/economy.png" alt="Economy" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Economy'">
+                    <div class="info">
+                        <h3>Economy</h3>
+                        <p>Set up currency, shop items, work rewards, and gambling.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshots/reaction-roles.png" alt="Reaction Roles" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Reaction+Roles'">
+                    <div class="info">
+                        <h3>Reaction Roles</h3>
+                        <p>Create role menus with emoji and role selection.</p>
+                    </div>
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshots/automod.png" alt="Auto-Mod" onerror="this.src='https://via.placeholder.com/400x200/1a1a24/a855f7?text=Auto-Moderation'">
+                    <div class="info">
+                        <h3>Auto-Moderation</h3>
+                        <p>Configure spam filters, banned words, and protection settings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple Pricing</h2>
+                <p>Choose the plan that works for you</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Monthly -->
+                <div class="price-card">
+                    <h3>Monthly</h3>
+                    <div class="price-amount">
+                        <span class="amount">$9.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="price-features">
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Updates Included</li>
+                        <li>Standard Support</li>
+                        <li>Cancel Anytime</li>
+                    </ul>
+                    <div class="price-buttons">
+                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank">
+                            <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                            Pay in Discord
+                        </a>
+                        <div class="stripe-btn-wrapper">
+                            <stripe-buy-button
+                                buy-button-id="buy_btn_1Sj3KNDuAWDPGxpNWbJw05XN"
+                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
+                            ></stripe-buy-button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Yearly -->
+                <div class="price-card featured">
+                    <div class="price-badge">MOST POPULAR</div>
+                    <h3>Yearly</h3>
+                    <div class="price-amount">
+                        <span class="amount">$79</span>
+                        <span class="period">/year</span>
+                    </div>
+                    <ul class="price-features">
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Updates Included</li>
+                        <li>Standard Support</li>
+                        <li class="highlight">Save 34%</li>
+                    </ul>
+                    <div class="price-buttons">
+                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank">
+                            <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                            Pay in Discord
+                        </a>
+                        <div class="stripe-btn-wrapper">
+                            <stripe-buy-button
+                                buy-button-id="buy_btn_1Sj3IfDuAWDPGxpNeWyyS6eW"
+                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
+                            ></stripe-buy-button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lifetime -->
+                <div class="price-card">
+                    <div class="price-badge green">BEST VALUE</div>
+                    <h3>Lifetime</h3>
+                    <div class="price-amount">
+                        <span class="amount">$149</span>
+                        <span class="period">one-time</span>
+                    </div>
+                    <ul class="price-features">
+                        <li>Full Control Panel GUI</li>
+                        <li>All Bot Features</li>
+                        <li>Lifetime Updates</li>
+                        <li class="highlight">⭐ Priority Support</li>
+                        <li>Pay Once, Own Forever</li>
+                    </ul>
+                    <div class="price-buttons">
+                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank">
+                            <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                            Pay in Discord
+                        </a>
+                        <div class="stripe-btn-wrapper">
+                            <stripe-buy-button
+                                buy-button-id="buy_btn_1Sj3JKDuAWDPGxpNVpbpIkzk"
+                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
+                            ></stripe-buy-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- License Terms -->
+            <div class="license-terms">
+                <h3>📋 License Terms</h3>
+                <div class="license-grid">
+                    <div class="license-item">
+                        <strong>🔒 Hardware Locked</strong>
+                        <p>Each key works on 1 PC only</p>
+                    </div>
+                    <div class="license-item">
+                        <strong>🤖 Single Bot Instance</strong>
+                        <p>1 key = 1 bot. Need 2 bots? Get 2 keys</p>
+                    </div>
+                    <div class="license-item">
+                        <strong>🔄 HWID Reset</strong>
+                        <p>1 free reset per year via support ticket</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align:center;margin-top:32px;color:var(--text-muted);font-size:0.9rem;">
+                💡 <strong>Discord purchase:</strong> Instant key delivery via ticket<br>
+                💳 <strong>Card purchase:</strong> Create support ticket with order # to receive key
+            </p>
+        </div>
+    </section>
+    
+    <!-- FAQ Section -->
+    <section id="faq" style="background: var(--bg-card);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know</p>
+            </div>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What is hardware locking (HWID)?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Your license key is locked to your computer's unique hardware ID. This means the key will only work on the PC where you first activated it. This prevents key sharing and piracy.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>I got a new PC. How do I transfer my license?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Open a support ticket in our Discord server and request an HWID reset. You are allowed <strong>1 free HWID reset per year</strong>. After that, additional resets may require purchasing a new license.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I run multiple bots with one key?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. Each license key is valid for <strong>one bot instance only</strong>. If you want to run 2 separate bots, you'll need to purchase 2 keys.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How do I get my key after paying with card?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        After payment, join our Discord server, accept the rules, and create a ticket in the #support channel. Provide your Stripe order number and payment screenshot to receive your key (usually within 24 hours).
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What's the difference between Standard and Priority Support?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <strong>Standard Support</strong> (Monthly/Yearly): Get help via Discord tickets during normal hours.<br>
+                        <strong>Priority Support</strong> (Lifetime only): Your tickets are handled first, faster response times, and direct assistance with setup issues.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I get a refund?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Refunds are available within 7 days of purchase if your license has not been activated. Once activated, refunds are not available. Monthly/yearly subscriptions can be cancelled anytime.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do I need coding knowledge?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        No coding required! The Control Panel GUI makes configuration easy. You just need basic computer skills to run the application and follow the setup guide.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Where does the bot run?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        The bot runs on your own computer or server - you have full control. For 24/7 operation, you can host it on a VPS like Oracle Cloud (free tier available), Railway, or any other hosting service.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="logo.png" alt="Evil Bot" onerror="this.outerHTML='<div style=\'width:32px;height:32px;background:linear-gradient(135deg,#a855f7,#6366f1);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;\'>😈</div>'">
+                <span style="font-weight:600;">The Evil Bot</span>
+            </div>
+            <div class="footer-links">
+                <a href="../">Synar</a>
+                <a href="https://dsc.gg/mozart" target="_blank">Discord</a>
+                <a href="mailto:discordevilbot@gmail.com">Contact</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+            </div>
+            <div class="footer-copy">
+                © 2025 Synar. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // FAQ toggle
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const isOpen = answer.style.display === 'block';
+                
+                // Close all
+                document.querySelectorAll('.faq-answer').forEach(a => a.style.display = 'none');
+                document.querySelectorAll('.faq-question span:last-child').forEach(s => s.textContent = '+');
+                
+                // Open clicked
+                if (!isOpen) {
+                    answer.style.display = 'block';
+                    q.querySelector('span:last-child').textContent = '−';
+                }
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
