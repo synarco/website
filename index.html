@@ -3,664 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Evil Bot - Discord Bot & Control Panel</title>
-    <meta name="description" content="A powerful Discord bot with music, leveling, economy, and more. Get the Control Panel to run your own instance!">
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/luvmxzart/the-evil-bot-website/main/icon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Synar - Software Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #a855f7;
-            --primary-dark: #9333ea;
-            --primary-light: #c084fc;
-            --bg-dark: #0a0a0f;
-            --bg-card: #12121a;
-            --bg-card-hover: #1a1a24;
+            --bg: #0a0a0f;
+            --bg-card: #111118;
+            --bg-hover: #1a1a24;
             --text: #ffffff;
             --text-muted: #9ca3af;
-            --text-dim: #6b7280;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #a855f7;
             --success: #22c55e;
             --border: #1f1f2e;
-            --glow: rgba(168, 85, 247, 0.4);
-            --discord: #5865F2;
+            --gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-dark);
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
             color: var(--text);
             line-height: 1.6;
             overflow-x: hidden;
         }
         
-        .bg-gradient {
+        /* Animated background */
+        .bg-grid {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-                var(--bg-dark);
-            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
         }
         
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .bg-glow {
+            position: fixed;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
         
         /* Navigation */
         nav {
-            position: fixed; top: 0; left: 0; right: 0;
-            padding: 16px 0;
-            background: rgba(10, 10, 15, 0.9);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            background: rgba(10, 10, 15, 0.8);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
-        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         
         .logo {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem; font-weight: 700;
-            color: var(--text); text-decoration: none;
-            display: flex; align-items: center; gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
-        .logo-icon { width: 36px; height: 36px; border-radius: 8px; }
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
         
-        .nav-links { display: flex; gap: 32px; align-items: center; }
-        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
         .nav-links a:hover { color: var(--text); }
         
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex; align-items: center;
-            padding: 120px 0 80px;
-            text-align: center;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
         }
         
-        .hero-content { max-width: 800px; margin: 0 auto; }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+        }
         
         .hero-badge {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 16px;
-            background: rgba(168, 85, 247, 0.1);
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
             border-radius: 50px;
-            font-size: 0.85rem; color: var(--primary-light);
+            font-size: 0.85rem;
+            color: var(--primary-light);
             margin-bottom: 24px;
         }
         
         .hero h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 700; line-height: 1.1;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
             margin-bottom: 24px;
-            background: linear-gradient(135deg, #fff 0%, var(--primary-light) 50%, var(--primary) 100%);
+        }
+        
+        .hero h1 span {
+            background: var(--gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         
         .hero p {
-            font-size: 1.25rem; color: var(--text-muted);
-            max-width: 600px; margin: 0 auto 40px;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
         }
         
-        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-        
-        .btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 16px 32px; border-radius: 12px;
-            font-weight: 600; font-size: 1rem;
-            text-decoration: none; transition: all 0.3s;
-            cursor: pointer; border: none;
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            box-shadow: 0 4px 20px var(--glow);
+        /* Products Section */
+        .products {
+            padding: 120px 40px;
+            position: relative;
+            z-index: 1;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
         
-        .btn-discord { background: var(--discord); color: white; }
-        .btn-discord:hover { background: #4752C4; transform: translateY(-2px); }
-        
-        .btn-secondary {
-            background: var(--bg-card); color: var(--text);
-            border: 1px solid var(--border);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .btn-secondary:hover { background: var(--bg-card-hover); border-color: var(--primary); }
         
-        /* Stats */
-        .stats { display: flex; justify-content: center; gap: 48px; margin-top: 60px; flex-wrap: wrap; }
-        .stat { text-align: center; }
-        .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; color: var(--primary-light); }
-        .stat-label { font-size: 0.9rem; color: var(--text-muted); }
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
         
-        /* Screenshot Showcase */
-        .showcase { padding: 100px 0; }
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
         
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; margin-bottom: 16px; }
-        .section-header p { color: var(--text-muted); font-size: 1.1rem; }
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
         
-        .screenshot-grid {
+        .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 24px;
+            gap: 32px;
         }
         
-        .screenshot-card {
+        .product-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-        
-        .screenshot-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-        
-        .screenshot-card img {
-            width: 100%; height: 200px;
-            object-fit: cover; object-position: top;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .screenshot-card .placeholder {
-            width: 100%; height: 200px;
-            background: linear-gradient(135deg, var(--bg-card-hover) 0%, var(--bg-dark) 100%);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .screenshot-card-content { padding: 24px; }
-        .screenshot-card h3 { font-size: 1.25rem; margin-bottom: 8px; }
-        .screenshot-card p { color: var(--text-muted); font-size: 0.9rem; }
-        
-        /* Features */
-        .features { padding: 100px 0; background: var(--bg-card); }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-        
-        .feature-card {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 16px; padding: 32px;
-            transition: all 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-        }
-        
-        .feature-icon {
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; margin-bottom: 20px;
-        }
-        
-        .feature-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
-        .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
-        
-        /* Pricing / CTA */
-        .cta {
-            padding: 100px 0;
-            text-align: center;
-            background: linear-gradient(180deg, var(--bg-dark) 0%, #1a1a2e 100%);
-        }
-        
-        .cta h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem; margin-bottom: 16px;
-        }
-        
-        .cta p { color: var(--text-muted); margin-bottom: 32px; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-        
-        .price-box {
-            position: relative;
-            background: var(--bg-card);
-            border: 2px solid var(--primary);
             border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 60px var(--glow);
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .product-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .product-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        
+        .product-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        
+        .product-features {
+            list-style: none;
+            margin-bottom: 24px;
+        }
+        
+        .product-features li {
+            padding: 8px 0;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .product-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .product-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        /* Coming Soon Card */
+        .product-card.coming-soon {
+            opacity: 0.7;
+        }
+        
+        .product-card.coming-soon::before {
+            background: linear-gradient(135deg, #374151, #4b5563);
+        }
+        
+        .product-card.coming-soon .product-badge {
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-muted);
+        }
+        
+        /* About Section */
+        .about {
+            padding: 120px 40px;
+            background: var(--bg-card);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
             text-align: center;
         }
         
-        .price-box h3 { font-size: 1.5rem; margin-bottom: 8px; }
+        .about-stat {
+            padding: 32px;
+        }
         
-        .price-box .price {
+        .about-stat .number {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 3rem; font-weight: 700;
-            color: var(--primary-light);
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .price-box .price span { font-size: 1rem; color: var(--text-muted); margin-left: 4px; }
-        
-        .price-box ul {
-            list-style: none; text-align: left;
-            margin: 24px 0;
+        .about-stat .label {
+            color: var(--text-muted);
+            margin-top: 8px;
         }
-        
-        .price-box li {
-            padding: 8px 0; color: var(--text-muted);
-            display: flex; align-items: center; gap: 10px;
-        }
-        
-        .price-box li::before { content: '✓'; color: var(--success); font-weight: 700; }
         
         /* Footer */
         footer {
-            padding: 60px 0 30px;
+            padding: 60px 40px;
             border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
         }
         
         .footer-content {
-            display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap; gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
         }
         
-        .footer-links { display: flex; gap: 24px; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
-        .footer-links a:hover { color: var(--primary-light); }
-        .footer-copy { color: var(--text-dim); font-size: 0.85rem; }
+        .footer-links {
+            display: flex;
+            gap: 32px;
+        }
         
-        /* Mobile */
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .footer-links a:hover { color: var(--text); }
+        
+        .footer-copy {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
             .nav-links { display: none; }
+            .hero { padding: 100px 20px 60px; }
             .hero h1 { font-size: 2.5rem; }
-            .stats { gap: 24px; }
-            .price-box { padding: 30px 40px; }
+            .products, .about { padding: 80px 20px; }
+            .products-grid { grid-template-columns: 1fr; }
             .footer-content { flex-direction: column; text-align: center; }
-        }
-        
-        /* Discord Icon SVG */
-        .discord-icon {
-            width: 20px; height: 20px; fill: currentColor;
         }
     </style>
 </head>
 <body>
-    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
     
     <nav>
-        <div class="container">
+        <div class="nav-container">
             <a href="#" class="logo">
-                <img src="logo.png" alt="Evil Bot" class="logo-icon"> The Evil Bot
+                <div class="logo-icon">S</div>
+                Synar
             </a>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#showcase">Screenshots</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#faq">FAQ</a>
-                <a href="https://dsc.gg/mozart" target="_blank">Discord</a>
+                <a href="#products">Products</a>
+                <a href="#about">About</a>
+                <a href="mailto:discordevilbot@gmail.com">Contact</a>
+                <a href="https://dsc.gg/mozart" class="btn btn-primary" target="_blank">Join Discord</a>
             </div>
         </div>
     </nav>
     
     <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">✨ Desktop Control Panel Available</div>
-                <h1>The Ultimate Discord Bot</h1>
-                <p>Music, leveling, economy, moderation, and more. Add to your server for free, or get the Control Panel to run your own private instance.</p>
-                <div class="hero-buttons">
-                    <a href="https://discord.com/oauth2/authorize?client_id=1450690787871559831&permissions=8&scope=bot%20applications.commands" class="btn btn-discord" target="_blank">
-                        <svg class="discord-icon" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-                        Add to Discord — Free
-                    </a>
-                    <a href="https://dsc.gg/mozart" class="btn btn-primary" target="_blank">
-                        🎮 Get Control Panel
-                    </a>
-                </div>
-                <div class="stats">
-                    <div class="stat">
-                        <div class="stat-value">50+</div>
-                        <div class="stat-label">Commands</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">∞</div>
-                        <div class="stat-label">Servers</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">24/7</div>
-                        <div class="stat-label">Uptime</div>
-                    </div>
-                </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                ✨ Building the future of automation
+            </div>
+            <h1>Software that <span>works for you</span></h1>
+            <p>We create powerful, user-friendly tools that automate your digital life. From Discord bots to productivity apps, Synar builds software that just works.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn btn-primary">Explore Products</a>
+                <a href="https://dsc.gg/mozart" class="btn btn-secondary" target="_blank">Join Community</a>
             </div>
         </div>
     </section>
     
-    <section class="showcase" id="showcase">
+    <section class="products" id="products">
         <div class="container">
             <div class="section-header">
-                <h2>Control Panel Preview</h2>
-                <p>A beautiful desktop GUI to manage your bot - no coding required</p>
+                <h2>Our Products</h2>
+                <p>Professional tools designed to make your life easier</p>
             </div>
-            <div class="screenshot-grid">
-                <div class="screenshot-card">
-                    <img src="screenshots/dashboard.png" alt="Dashboard" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">📊</div>
-                    <div class="screenshot-card-content">
-                        <h3>Dashboard</h3>
-                        <p>Real-time monitoring with server stats, user counts, and quick controls. Start/stop your bot with one click.</p>
-                    </div>
+            
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-badge">Available Now</div>
+                    <div class="product-icon">😈</div>
+                    <h3>The Evil Bot</h3>
+                    <p>The ultimate Discord bot with a beautiful GUI control panel. Music, leveling, economy, moderation, and more.</p>
+                    <ul class="product-features">
+                        <li>Desktop Control Panel</li>
+                        <li>Music from YouTube, Spotify & SoundCloud</li>
+                        <li>Advanced Leveling System</li>
+                        <li>Full Economy with Shop</li>
+                        <li>Auto-Moderation</li>
+                        <li>Reaction Roles & Tickets</li>
+                    </ul>
+                    <a href="https://synarco.github.io/the-evil-bot-website/" class="btn btn-primary" target="_blank">
+                        Learn More →
+                    </a>
                 </div>
-                <div class="screenshot-card">
-                    <img src="screenshots/music-library.png" alt="Music Library" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">🎵</div>
-                    <div class="screenshot-card-content">
-                        <h3>Music Library</h3>
-                        <p>Save your favorite songs and playlists for quick access. Support for YouTube, Spotify, and SoundCloud.</p>
-                    </div>
+                
+                <div class="product-card coming-soon">
+                    <div class="product-badge">Coming Soon</div>
+                    <div class="product-icon">🚀</div>
+                    <h3>Synar Launcher</h3>
+                    <p>A unified dashboard to manage all your Synar applications. One place to control everything.</p>
+                    <ul class="product-features">
+                        <li>Manage all Synar apps</li>
+                        <li>Automatic updates</li>
+                        <li>Cloud sync settings</li>
+                        <li>Usage analytics</li>
+                    </ul>
+                    <button class="btn btn-secondary" disabled>
+                        Coming 2026
+                    </button>
                 </div>
-                <div class="screenshot-card">
-                    <img src="screenshots/reaction-roles.png" alt="Reaction Roles" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">🎭</div>
-                    <div class="screenshot-card-content">
-                        <h3>Reaction Roles</h3>
-                        <p>Visual emoji picker and role builder. Set up self-assign roles in seconds with any emoji.</p>
-                    </div>
-                </div>
-                <div class="screenshot-card">
-                    <img src="screenshots/leveling.png" alt="Leveling System" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">📈</div>
-                    <div class="screenshot-card-content">
-                        <h3>Leveling System</h3>
-                        <p>Configure XP rates, voice XP, multiplier roles, and customize rank card colors.</p>
-                    </div>
-                </div>
-                <div class="screenshot-card">
-                    <img src="screenshots/economy.png" alt="Economy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">💰</div>
-                    <div class="screenshot-card-content">
-                        <h3>Economy</h3>
-                        <p>Custom currency name & symbol. Create shop items with role rewards and stock limits.</p>
-                    </div>
-                </div>
-                <div class="screenshot-card">
-                    <img src="screenshots/automod.png" alt="Auto-Moderation" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-                    <div class="placeholder" style="display:none">🛡️</div>
-                    <div class="screenshot-card-content">
-                        <h3>Auto-Moderation</h3>
-                        <p>Word filter, spam detection, link blocking, and mass mention protection with one-click toggles.</p>
-                    </div>
+                
+                <div class="product-card coming-soon">
+                    <div class="product-badge">Coming Soon</div>
+                    <div class="product-icon">🤖</div>
+                    <h3>More Apps</h3>
+                    <p>We're always working on new tools to help automate your digital life. Stay tuned!</p>
+                    <ul class="product-features">
+                        <li>Task automation</li>
+                        <li>Social media tools</li>
+                        <li>Developer utilities</li>
+                        <li>And much more...</li>
+                    </ul>
+                    <a href="https://dsc.gg/mozart" class="btn btn-secondary" target="_blank">
+                        Get Updates →
+                    </a>
                 </div>
             </div>
         </div>
     </section>
     
-    <section class="features" id="features">
+    <section class="about" id="about">
         <div class="container">
             <div class="section-header">
-                <h2>Packed with Features</h2>
-                <p>Everything your Discord server needs in one bot</p>
+                <h2>Why Synar?</h2>
+                <p>We believe software should be powerful yet simple</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎵</div>
-                    <h3>Music System</h3>
-                    <p>High-quality playback from YouTube, Spotify, and SoundCloud. Queue, favorites, lyrics, and DJ controls.</p>
+            
+            <div class="about-grid">
+                <div class="about-stat">
+                    <div class="number">100+</div>
+                    <div class="label">Happy Customers</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Leveling & XP</h3>
-                    <p>Engage your community with XP from messages and voice chat. Custom rank cards and level-up rewards.</p>
+                <div class="about-stat">
+                    <div class="number">24/7</div>
+                    <div class="label">Support Available</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Economy</h3>
-                    <p>Virtual currency with daily rewards, work, gambling, bank system, and server shop.</p>
+                <div class="about-stat">
+                    <div class="number">99.9%</div>
+                    <div class="label">Uptime Guarantee</div>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Moderation</h3>
-                    <p>Keep your server safe with auto-mod, warnings, mutes, bans, and comprehensive logging.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎭</div>
-                    <h3>Reaction Roles</h3>
-                    <p>Let members self-assign roles with reactions, buttons, or dropdown menus.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Fun & Games</h3>
-                    <p>Trivia, giveaways, polls, 8ball, coinflip, and more to keep your community entertained.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎫</div>
-                    <h3>Tickets</h3>
-                    <p>Support ticket system with transcripts, categories, and staff management.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⭐</div>
-                    <h3>Starboard</h3>
-                    <p>Highlight the best messages in your server automatically.</p>
+                <div class="about-stat">
+                    <div class="number">∞</div>
+                    <div class="label">Possibilities</div>
                 </div>
             </div>
         </div>
     </section>
-    
-    <section class="cta" id="pricing">
-        <div class="container">
-            <h2>Get The Control Panel</h2>
-            <p>Run your own private instance with full customization and control</p>
-            
-            <div class="pricing-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin:40px 0;max-width:1000px;margin-left:auto;margin-right:auto;">
-                <div class="price-box" style="border-color:#60a5fa;">
-                    <h3>Monthly</h3>
-                    <div class="price">$9.99<span>/month</span></div>
-                    <ul>
-                        <li>Full Control Panel GUI</li>
-                        <li>All Bot Features</li>
-                        <li>Updates Included</li>
-                        <li>Standard Support</li>
-                        <li>Cancel Anytime</li>
-                    </ul>
-                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;">
-                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank" style="width:100%;text-align:center;padding:12px;">
-                            <svg class="discord-icon" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;fill:currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-                            Pay in Discord
-                        </a>
-                        <div style="display:flex;justify-content:center;">
-                            <stripe-buy-button
-                                buy-button-id="buy_btn_1Sj3KNDuAWDPGxpNWbJw05XN"
-                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
-                            ></stripe-buy-button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="price-box" style="border-color:#a855f7;transform:scale(1.05);">
-                    <div style="background:var(--primary);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;position:absolute;top:-12px;left:50%;transform:translateX(-50%);">MOST POPULAR</div>
-                    <h3>Yearly</h3>
-                    <div class="price">$79<span>/year</span></div>
-                    <ul>
-                        <li>Full Control Panel GUI</li>
-                        <li>All Bot Features</li>
-                        <li>Updates Included</li>
-                        <li>Standard Support</li>
-                        <li>Save 34%</li>
-                    </ul>
-                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;">
-                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank" style="width:100%;text-align:center;padding:12px;">
-                            <svg class="discord-icon" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;fill:currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-                            Pay in Discord
-                        </a>
-                        <div style="display:flex;justify-content:center;">
-                            <stripe-buy-button
-                                buy-button-id="buy_btn_1Sj3IfDuAWDPGxpNeWyyS6eW"
-                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
-                            ></stripe-buy-button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="price-box" style="border-color:#22c55e;">
-                    <div style="background:#22c55e;color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;position:absolute;top:-12px;left:50%;transform:translateX(-50%);">BEST VALUE</div>
-                    <h3>Lifetime</h3>
-                    <div class="price">$149<span>one-time</span></div>
-                    <ul>
-                        <li>Full Control Panel GUI</li>
-                        <li>All Bot Features</li>
-                        <li>Lifetime Updates</li>
-                        <li style="color:#22c55e;font-weight:600">⭐ Priority Support</li>
-                        <li>Pay Once, Own Forever</li>
-                    </ul>
-                    <div style="display:flex;flex-direction:column;gap:8px;margin-top:20px;">
-                        <a href="https://dsc.gg/mozart" class="btn btn-discord" target="_blank" style="width:100%;text-align:center;padding:12px;">
-                            <svg class="discord-icon" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:middle;margin-right:6px;fill:currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-                            Pay in Discord
-                        </a>
-                        <div style="display:flex;justify-content:center;">
-                            <stripe-buy-button
-                                buy-button-id="buy_btn_1Sj3JKDuAWDPGxpNVpbpIkzk"
-                                publishable-key="pk_live_51Sj2e5DuAWDPGxpNkNKqMkRhzd3LDSFcdZHBR2xgbqu354CL1hYmNnQVookGcA7mJnou2MMKl6OBQpDR4VDVf8m700EPTnJGnH"
-                            ></stripe-buy-button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top:40px;padding:24px;background:var(--bg-card);border-radius:16px;border:1px solid var(--border);max-width:700px;margin-left:auto;margin-right:auto;">
-                <h3 style="margin-bottom:16px;font-size:1.1rem;">📋 License Terms</h3>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;text-align:left;color:var(--text-muted);font-size:0.9rem;">
-                    <div>
-                        <strong style="color:var(--text)">🔒 Hardware Locked</strong>
-                        <p>Each key works on 1 PC only</p>
-                    </div>
-                    <div>
-                        <strong style="color:var(--text)">🤖 Single Bot Instance</strong>
-                        <p>1 key = 1 bot. Need 2 bots? Get 2 keys</p>
-                    </div>
-                    <div>
-                        <strong style="color:var(--text)">🔄 Transferable</strong>
-                        <p>1 free HWID reset per year via ticket</p>
-                    </div>
-                </div>
-            </div>
-            
-            <p style="margin-top:32px;color:var(--text-muted);font-size:0.85rem;">
-                💡 <strong>Discord purchase:</strong> Instant key delivery via ticket<br>
-                💳 <strong>Card purchase:</strong> Create support ticket with order # to receive key
-            </p>
-        </div>
-    </section>
-    
-    <!-- FAQ Section -->
-    <section class="faq" id="faq" style="padding:80px 0;">
-        <div class="container">
-            <div class="section-header" style="text-align:center;margin-bottom:48px;">
-                <h2>Frequently Asked Questions</h2>
-                <p style="color:var(--text-muted)">Everything you need to know</p>
-            </div>
-            
-            <div style="max-width:800px;margin:0 auto;">
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> What is hardware locking (HWID)?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        Your license key is locked to your computer's unique hardware ID. This means the key will only work on the PC where you first activated it. This prevents key sharing and piracy.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> I got a new PC. How do I transfer my license?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        Open a support ticket in our Discord server and request an HWID reset. You are allowed <strong>1 free HWID reset per year</strong>. After that, additional resets may require purchasing a new license.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> Can I run multiple bots with one key?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        No. Each license key is valid for <strong>one bot instance only</strong>. If you want to run 2 separate bots (for example, one for your gaming server and one for your community server), you'll need to purchase 2 keys.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> How do I get my license key after paying with card?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        After payment, you'll be redirected to a thank you page with instructions. Join our Discord server, accept the rules, and create a ticket in the #support channel. Provide your Stripe order number and payment screenshot to receive your key (usually within 24 hours).
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> What's the difference between Standard and Priority Support?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        <strong>Standard Support</strong> (Monthly/Yearly): Get help via Discord tickets during normal hours.<br>
-                        <strong>Priority Support</strong> (Lifetime only): Your tickets are handled first, faster response times, and direct assistance with setup issues.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> Can I get a refund?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        Refunds are available within 7 days of purchase if your license has not been activated. Once activated, refunds are not available. Monthly/yearly subscriptions can be cancelled anytime.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:16px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> Do I need coding knowledge to use this?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        Basic setup requires some familiarity with running programs and following instructions. The Control Panel GUI makes configuration easy with no coding required. However, you'll need to set up a database and (optionally) a Lavalink server for music.
-                    </p>
-                </div>
-                
-                <div class="faq-item" style="background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;">
-                    <h3 style="font-size:1.1rem;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
-                        <span style="color:var(--primary)">Q:</span> Where does the bot run?
-                    </h3>
-                    <p style="color:var(--text-muted);line-height:1.7;">
-                        The bot runs on your own computer or server - you have full control. For 24/7 operation, you can host it on a VPS like Oracle Cloud (free tier available), Railway, or any other hosting service.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Stripe Buy Button Script -->
-    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
     
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="https://dsc.gg/mozart" target="_blank">Support Discord</a>
-                    <a href="mailto:discordevilbot@gmail.com">Contact</a>
-                </div>
-                <div class="footer-copy">
-                    © 2024 The Evil Bot. Made with 💜 | discordevilbot@gmail.com
-                </div>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#products">Products</a>
+                <a href="https://dsc.gg/mozart" target="_blank">Discord</a>
+                <a href="mailto:discordevilbot@gmail.com">Contact</a>
+                <a href="https://synarco.github.io/the-evil-bot-website/terms.html">Terms</a>
+                <a href="https://synarco.github.io/the-evil-bot-website/privacy.html">Privacy</a>
+            </div>
+            <div class="footer-copy">
+                © 2025 Synar. All rights reserved.
             </div>
         </div>
     </footer>
