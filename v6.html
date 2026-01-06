@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What's New in v6.0.0 - The Evil Bot</title>
+    <meta name="description" content="Discover all the new features in The Evil Bot v6.0.0 - Crafting, Seasonal Pass, Enhanced Security, and more!">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">😈</span>
+                <span class="brand-name">The Evil Bot</span>
+                <span class="version-badge new">v6.0.0</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="index.html#pricing">Pricing</a>
+                <a href="https://discord.gg/yourserver" class="btn-primary">Join Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-small">
+        <div class="container">
+            <div class="badge-new">🎉 NEW RELEASE</div>
+            <h1>The Evil Bot v6.0.0</h1>
+            <p>The biggest update yet! New systems, enhanced security, and powerful features.</p>
+            <div class="release-meta">
+                <span>📅 Released: January 2026</span>
+                <span>🔧 100% Complete</span>
+                <span>✅ Production Ready</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- What's New -->
+    <section class="whats-new">
+        <div class="container">
+            <h2 class="section-title">What's New in v6.0</h2>
+
+            <!-- Crafting System -->
+            <div class="feature-showcase">
+                <div class="showcase-content">
+                    <div class="showcase-badge">🆕 NEW SYSTEM</div>
+                    <h3>🔨 Crafting System</h3>
+                    <p class="showcase-description">
+                        A complete material-based crafting economy! Dismantle unwanted skins to get crafting materials,
+                        then use those materials to craft rare and exclusive skins.
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <span class="highlight-icon">💎</span>
+                            <div>
+                                <strong>6 Material Tiers</strong>
+                                <p>Common, Uncommon, Rare, Epic, Legendary, Mythic dust</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">📜</span>
+                            <div>
+                                <strong>Recipe System</strong>
+                                <p>Admins create custom recipes for crafting</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">♻️</span>
+                            <div>
+                                <strong>Dismantle Skins</strong>
+                                <p>Break down skins for materials (5-1500 dust based on rarity)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="command-examples">
+                        <h4>New Commands</h4>
+                        <code>!craft &lt;recipe_id&gt;</code> - Craft a skin using materials<br>
+                        <code>!dismantle &lt;skin_name&gt;</code> - Break down a skin<br>
+                        <code>!recipes</code> - View available crafting recipes
+                    </div>
+                </div>
+                <div class="showcase-image">
+                    <div class="screenshot-placeholder">
+                        <span class="placeholder-icon">🔨</span>
+                        <p>Crafting System Screenshot</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seasonal Pass -->
+            <div class="feature-showcase reverse">
+                <div class="showcase-content">
+                    <div class="showcase-badge">🆕 NEW SYSTEM</div>
+                    <h3>🎫 Seasonal Pass</h3>
+                    <p class="showcase-description">
+                        Battle pass-style progression system with free and premium tiers. Earn XP from activities,
+                        level up through tiers, and claim exclusive rewards!
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <span class="highlight-icon">📊</span>
+                            <div>
+                                <strong>XP Progression</strong>
+                                <p>1000 XP per tier, up to 100 tiers per season</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">🎁</span>
+                            <div>
+                                <strong>Dual Reward Tracks</strong>
+                                <p>Free rewards for all, premium rewards for pass holders</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">⏰</span>
+                            <div>
+                                <strong>Time-Limited Seasons</strong>
+                                <p>Create seasons with start/end dates</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="command-examples">
+                        <h4>New Commands</h4>
+                        <code>!pass [view]</code> - View your progress<br>
+                        <code>!pass buy</code> - Purchase premium pass<br>
+                        <code>!pass claim &lt;tier&gt;</code> - Claim tier rewards<br>
+                        <code>!pass rewards</code> - View all available rewards
+                    </div>
+                </div>
+                <div class="showcase-image">
+                    <div class="screenshot-placeholder">
+                        <span class="placeholder-icon">🎫</span>
+                        <p>Seasonal Pass Screenshot</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timezone Integration -->
+            <div class="feature-showcase">
+                <div class="showcase-content">
+                    <div class="showcase-badge">✨ ENHANCED</div>
+                    <h3>🌍 Timezone Integration</h3>
+                    <p class="showcase-description">
+                        Daily/weekly/monthly resets now respect your server's configured timezone!
+                        No more 4pm resets when you expected midnight.
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <span class="highlight-icon">🎟️</span>
+                            <div>
+                                <strong>Lottery Resets</strong>
+                                <p>Ticket limits reset at midnight in your timezone</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">💰</span>
+                            <div>
+                                <strong>Economy Resets</strong>
+                                <p>Daily/weekly/monthly commands use server time</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">🕐</span>
+                            <div>
+                                <strong>17 Timezones</strong>
+                                <p>EST, PST, GMT, CET, JST, AEST, and more!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-image">
+                    <div class="screenshot-placeholder">
+                        <span class="placeholder-icon">🌍</span>
+                        <p>Timezone System Screenshot</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Enhancement -->
+            <div class="feature-showcase reverse">
+                <div class="showcase-content">
+                    <div class="showcase-badge">🔒 SECURITY</div>
+                    <h3>🛡️ Enhanced License Security</h3>
+                    <p class="showcase-description">
+                        Critical security update! License validation now properly handles suspended/revoked licenses
+                        with periodic monitoring and automatic termination.
+                    </p>
+                    <div class="feature-highlights">
+                        <div class="highlight">
+                            <span class="highlight-icon">🔍</span>
+                            <div>
+                                <strong>Periodic Monitoring</strong>
+                                <p>Checks license status every 5 minutes</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">⚠️</span>
+                            <div>
+                                <strong>Auto-Termination</strong>
+                                <p>30-second warning before bot shutdown on invalid license</p>
+                            </div>
+                        </div>
+                        <div class="highlight">
+                            <span class="highlight-icon">📋</span>
+                            <div>
+                                <strong>Debug Logging</strong>
+                                <p>Comprehensive logging for troubleshooting</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-image">
+                    <div class="screenshot-placeholder">
+                        <span class="placeholder-icon">🔒</span>
+                        <p>Security Enhancement</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Features -->
+    <section class="additional-features">
+        <div class="container">
+            <h2 class="section-title">More Improvements in v6.0</h2>
+
+            <div class="improvements-grid">
+                <div class="improvement-card">
+                    <span class="improvement-icon">🏆</span>
+                    <h4>Achievement System</h4>
+                    <p>15+ achievements with automatic skin rewards when unlocked.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <span class="improvement-icon">🎨</span>
+                    <h4>PNG to Emoji</h4>
+                    <p>Custom PNG skins auto-convert to Discord emojis for in-game use.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <span class="improvement-icon">💾</span>
+                    <h4>Database Migrations</h4>
+                    <p>Automated migration system for easy database updates.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <span class="improvement-icon">📖</span>
+                    <h4>Documentation</h4>
+                    <p>Comprehensive guides for all new features and systems.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <span class="improvement-icon">🔧</span>
+                    <h4>Bug Fixes</h4>
+                    <p>Loot boxes, JSON errors, and GUI improvements.</p>
+                </div>
+
+                <div class="improvement-card">
+                    <span class="improvement-icon">⚡</span>
+                    <h4>Performance</h4>
+                    <p>Optimized queries and improved response times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Migration Guide -->
+    <section class="migration-guide">
+        <div class="container">
+            <h2 class="section-title">Upgrading to v6.0</h2>
+            <p class="section-subtitle">Follow these steps to safely upgrade from v5.2.0</p>
+
+            <div class="migration-steps">
+                <div class="migration-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Backup Your Database</h4>
+                        <p>Always backup before major updates!</p>
+                        <code>pg_dump your_database > backup_v5.sql</code>
+                    </div>
+                </div>
+
+                <div class="migration-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Run Database Migrations</h4>
+                        <p>Apply all new database schemas</p>
+                        <code>node run-migrations.js</code>
+                    </div>
+                </div>
+
+                <div class="migration-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Restart Control Panel</h4>
+                        <p>Load the new license validation code</p>
+                        <code>Close and reopen the GUI application</code>
+                    </div>
+                </div>
+
+                <div class="migration-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Test New Features</h4>
+                        <p>Verify everything works as expected</p>
+                        <code>!craft, !pass, !recipes, !lottery</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="migration-note">
+                <strong>💡 Note:</strong> All existing data is preserved! Your economy balances, user skins,
+                achievements, and settings remain unchanged.
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="version-stats">
+        <div class="container">
+            <h2 class="section-title">v6.0 by the Numbers</h2>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">New Systems</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">New Commands</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">DB Migrations</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2000+</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Complete</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Breaking Changes</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="container">
+            <h2>Experience v6.0.0 Today!</h2>
+            <p>Upgrade now and unlock all the new features</p>
+            <div class="cta-buttons">
+                <a href="https://discord.gg/yourserver" class="btn-cta-primary">
+                    Download v6.0.0
+                </a>
+                <a href="index.html#pricing" class="btn-cta-secondary">
+                    View Pricing
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="brand-icon">😈</span>
+                    <span class="brand-name">The Evil Bot</span>
+                    <p>The most powerful Discord bot for your server.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="index.html#features">Features</a>
+                        <a href="index.html#commands">Commands</a>
+                        <a href="v6.html">What's New</a>
+                        <a href="index.html#pricing">Pricing</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="docs.html">Documentation</a>
+                        <a href="changelog.html">Changelog</a>
+                        <a href="faq.html">FAQ</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="https://discord.gg/yourserver">Discord Server</a>
+                        <a href="mailto:support@evilbot.com">Email Support</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 The Evil Bot. All rights reserved. | Built by Synar</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
